@@ -1,4 +1,5 @@
-import Behavior
+
 
 if __name__ == '__main__':
+    import Behavior
     Behavior.run()
