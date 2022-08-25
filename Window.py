@@ -1,5 +1,5 @@
 import tkinter as tk
-# from PIL import Image, ImageTk
+from PIL import Image, ImageTk
 from Behavior import Behavior
 
 actions = Behavior()
@@ -183,14 +183,16 @@ def create_objects_list(objects):
 root = tk.Tk()
 fr1 = tk.Frame(bg='gray')
 fr1.pack(fill=tk.X)
-fr2 = tk.Frame()
+fr2 = tk.Frame(height=800, width=1200)
 fr2.pack(fill=tk.BOTH, expand=True)
 fr3 = tk.Frame(bg='blue')
 fr3.pack(fill=tk.BOTH, expand=True)
-fr21 = tk.Frame(master=fr2, bg='green')
-fr21.pack(fill=tk.Y, side=tk.LEFT)
-can = tk.Canvas(master=fr2, width=1000, height=600, bg='black')
-can.pack(side=tk.LEFT)  # fill=tk.BOTH, side=tk.LEFT, expand=True)
+fr21 = tk.Frame(master=fr2, bg='green', width=100, height=600)
+fr21.pack(side=tk.LEFT)
+fr21.pack_propagate(False)
+can = tk.Canvas(master=fr2, width=1000, height=800, bg='black')
+can.pack_propagate(False)
+can.pack(fill=tk.BOTH, side=tk.LEFT, expand=True)
 can.bind("<Button-1>", lambda event: can_point((event.x, event.y)))
 can.bind("<Return>", lambda event: actions.use_coord())
 can.bind("<Double-Button-1>", lambda event: can_point())
@@ -252,7 +254,9 @@ def choice_object():
 
 button_new_object = tk.Button(master=fr21, text='create obj \u25BC', command=choice_object)
 button_new_object.pack()
-fr_hierarchy = tk.Frame(master=fr21)
+scroll = tk.Scrollbar(master=fr21, orient="vertical")
+scroll.pack(side="right", fill="y")
+fr_hierarchy = tk.Frame(master=fr21, height=700)
 fr_hierarchy.pack()
 
 fr_object_name = tk.Frame(master=fr22)
@@ -305,5 +309,8 @@ text_space.pack()
 def write_code(text):
     text_space.insert(1.0, text)
 
-#    self.photo = ImageTk.PhotoImage(Image.open("mouse.jpeg"))
-#    image = can.create_image(0, 0, anchor='nw', image=self.photo)
+
+photo = ImageTk.PhotoImage(Image.open("mouse.jpg"))
+image = can.create_image(0, 0, anchor='nw', image=photo)
+
+can.bind("<BackSpace>", lambda event: actions.destroy_object())

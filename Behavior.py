@@ -32,8 +32,9 @@ class Behavior:
             widgets = self.active_object.widgets
             Window.can_del_elements(self.active_object.points)
         self.active_object = element
+        self.active_object.points = ()
         for point in element.coordinates:
-            Window.can_create_definition_points(point)
+            self.active_object.points += (Window.can_create_definition_points(point), )
         Window.open_object(element.widgets, widgets, picture)
         if not element.coordinates_received() and self.use_coord != self.set_coordinates:
             self.use_coord = self.set_coordinates
@@ -43,7 +44,6 @@ class Behavior:
         Window.delete_object(self.active_object.widgets)
         Pattern.our_objects.remove(self.active_object)
         self.active_object = None
-
 
     def new_coord(self, widget, crds_widget):
         self.active_object.widgets += (widget,)
@@ -74,6 +74,8 @@ class Behavior:
     def set_coordinates(self, number=None, coord=None):
         amount = len(self.active_object.coordinates)
         if number is None or number == amount:
+            if self.coordinate is None and coord is None:
+                return
             if self.active_object.coordinates_received():
                 try:
                     self.active_object.plus_coord()
@@ -99,7 +101,6 @@ class Behavior:
                 self.active_object.elements += (Window.can_create_circle(self.active_object.get_coordinates()), )
             else:
                 self.active_object.elements += (Window.can_create_lines(self.active_object.get_coordinates()), )
-
 
 
 import Window
